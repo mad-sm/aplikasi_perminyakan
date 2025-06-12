@@ -91,7 +91,7 @@ include "response.php";
               <!-- Sidebar Menu -->
               <ul class="sidebar-menu">
               <li><a href="<?php echo $baseUrl;?>"><i class="fa fa-home"></i> <span>Home</span></a></li>
-              <li><a href="<?php echo $baseUrl;?>/public"> <i class="fa fa-book"></i> <span>Perhitungan</span></a></li>
+              <li><a href="<?php echo $baseUrl;?>/public/perhitungan"> <i class="fa fa-book"></i> <span>Perhitungan</span></a></li>
           </ul><!-- /.sidebar-menu -->
         </section>
         <!-- /.sidebar -->
