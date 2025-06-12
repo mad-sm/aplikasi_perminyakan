@@ -1,0 +1,5 @@
+services:
+  - type: web
+    name: aplikasi-perminyakan
+    env: docker
+    plan: free

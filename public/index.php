@@ -1,5 +1,5 @@
 <?php
-include "../../header.php";
+include "../header.php";
 ?>
 <div class="content-wrapper">
 <section class="content">
@@ -163,5 +163,5 @@ function exportCSV() {
 </script>
 
 <?php 
-include "../../footer.php";
+include "../footer.php";
 ?>
