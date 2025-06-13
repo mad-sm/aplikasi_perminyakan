@@ -41,9 +41,13 @@ include "../../header.php";
 
     <hr>
     <div id="hasil" class="table-responsive"></div>
+    <canvas id="grafikNCF" height="100" class="my-4"></canvas>
 </div>
 </section>
 </div>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
 let data = [];
@@ -125,31 +129,71 @@ function hitung() {
     hasilHTML += "</tbody></table>";
     hasilHTML += `<p><strong>Total NCF (10 tahun): $${totalNCF.toFixed(2)} M</strong></p>`;
     document.getElementById("hasil").innerHTML = hasilHTML;
+
+    // ====== Grafik Akumulasi NCF ======
+const labels = data.map(d => "Tahun " + d.tahun);
+
+let cumulativeNCF = 0;
+const ncfData = data.map(d => {
+    cumulativeNCF += d.ncf;
+    return cumulativeNCF.toFixed(2);
+});
+
+if (window.ncfChart) {
+    window.ncfChart.destroy();
 }
 
-function exportCSV() {
-    if (data.length === 0) {
-        alert("Silakan klik tombol 'Hitung' terlebih dahulu.");
-        return;
+const ctx = document.getElementById("grafikNCF").getContext("2d");
+window.ncfChart = new Chart(ctx, {
+    type: "line",
+    data: {
+        labels: labels,
+        datasets: [{
+            label: "Cumulative Net Cash Flow",
+            data: ncfData,
+            borderColor: "rgba(54, 162, 235, 1)",
+            backgroundColor: "rgba(54, 162, 235, 0.2)",
+            fill: true,
+            tension: 0.3,
+            pointRadius: 4,
+            pointHoverRadius: 6
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            title: {
+                display: true,
+                text: "Grafik Akumulasi Net Cash Flow (NCF)"
+            },
+            tooltip: {
+                mode: "index",
+                intersect: false
+            }
+        },
+        interaction: {
+            mode: "nearest",
+            axis: "x",
+            intersect: false
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: "Total Akumulasi NCF ($M)"
+                }
+            },
+            x: {
+                title: {
+                    display: true,
+                    text: "Tahun"
+                }
+            }
+        }
     }
+});
 
-    const headers = ["Tahun", "Produksi", "Income", "Investasi", "Opex", "Depresiasi", "Taxable Income", "Tax", "NCF"];
-    let csvContent = headers.join(",") + "\n";
-
-    data.forEach(d => {
-        const row = [
-            d.tahun,
-            d.produksi.toFixed(2),
-            d.income.toFixed(2),
-            d.investasi > 0 ? d.investasi.toFixed(2) : "",
-            d.opex.toFixed(2),
-            d.depresiasi.toFixed(2),
-            d.taxableIncome.toFixed(2),
-            d.tax.toFixed(2),
-            d.ncf.toFixed(2)
-        ];
-        csvContent += row.join(",") + "\n";
-    });
 
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
