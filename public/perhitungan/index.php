@@ -133,66 +133,66 @@ function hitung() {
     // ====== Grafik Akumulasi NCF ======
 const labels = data.map(d => "Tahun " + d.tahun);
 
-let cumulativeNCF = 0;
-const ncfData = data.map(d => {
-    cumulativeNCF += d.ncf;
-    return cumulativeNCF.toFixed(2);
-});
+    let cumulativeNCF = 0;
+    const ncfData = data.map(d => {
+        cumulativeNCF += d.ncf;
+        return cumulativeNCF.toFixed(2);
+    });
 
-if (window.ncfChart) {
-    window.ncfChart.destroy();
-}
+    if (window.ncfChart) {
+        window.ncfChart.destroy();
+    }
 
-const ctx = document.getElementById("grafikNCF").getContext("2d");
-window.ncfChart = new Chart(ctx, {
-    type: "line",
-    data: {
-        labels: labels,
-        datasets: [{
-            label: "Cumulative Net Cash Flow",
-            data: ncfData,
-            borderColor: "rgba(54, 162, 235, 1)",
-            backgroundColor: "rgba(54, 162, 235, 0.2)",
-            fill: true,
-            tension: 0.3,
-            pointRadius: 4,
-            pointHoverRadius: 6
-        }]
-    },
-    options: {
-        responsive: true,
-        plugins: {
-            title: {
-                display: true,
-                text: "Grafik Akumulasi Net Cash Flow (NCF)"
-            },
-            tooltip: {
-                mode: "index",
-                intersect: false
-            }
+    const ctx = document.getElementById("grafikNCF").getContext("2d");
+    window.ncfChart = new Chart(ctx, {
+        type: "line",
+        data: {
+            labels: labels,
+            datasets: [{
+                label: "Cumulative Net Cash Flow",
+                data: ncfData,
+                borderColor: "rgba(54, 162, 235, 1)",
+                backgroundColor: "rgba(54, 162, 235, 0.2)",
+                fill: true,
+                tension: 0.3,
+                pointRadius: 4,
+                pointHoverRadius: 6
+            }]
         },
-        interaction: {
-            mode: "nearest",
-            axis: "x",
-            intersect: false
-        },
-        scales: {
-            y: {
-                beginAtZero: true,
+        options: {
+            responsive: true,
+            plugins: {
                 title: {
                     display: true,
-                    text: "Total Akumulasi NCF ($M)"
+                    text: "Grafik Akumulasi Net Cash Flow (NCF)"
+                },
+                tooltip: {
+                    mode: "index",
+                    intersect: false
                 }
             },
-            x: {
-                title: {
-                    display: true,
-                    text: "Tahun"
+            interaction: {
+                mode: "nearest",
+                axis: "x",
+                intersect: false
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: "Total Akumulasi NCF ($M)"
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: "Tahun"
+                    }
                 }
             }
         }
-    }
-});
+    });
 
 
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
